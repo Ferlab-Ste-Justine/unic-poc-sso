@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spark-user1
+  labels:
+    name: spark-user1
+data:
+  spark-user1.conf: |
+    spark.kubernetes.namespace=user1
+    spark.kubernetes.executor.secrets.user1-minio-secret=/root/.aws
+    spark.kubernetes.executor.secrets.user1-spark-secret=/etc/secret

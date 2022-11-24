@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: keycloakdb
+spec:
+  template:
+    spec:
+      containers:
+        - name: keycloakdb
+          image: postgres:9.6
+          command: ["createdb"]
+          args: ["-h","postgres", "keycloak" ]
+          env:
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_USER
+                  name: postgres
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: postgres
+      restartPolicy: Never
