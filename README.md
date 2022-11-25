@@ -34,4 +34,7 @@ minikube image load ferlabcrsj/setup-spark-config
 ```
 
 
-# "spark.authenticate.secret.file": "/etc/secret/spark-secret", # https://issues.apache.org/jira/browse/SPARK-33332 :(
+Unfortunately, cannot use due to https://issues.apache.org/jira/browse/SPARK-33332 :
+```
+"spark.authenticate.secret.file": "/etc/secret/spark-secret"
+```
