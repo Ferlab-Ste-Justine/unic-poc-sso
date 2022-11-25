@@ -8,5 +8,6 @@ metadata:
 data:
   spark-user1.conf: |
     spark.kubernetes.namespace=user1
-    spark.kubernetes.executor.secrets.user1-minio-secret=/root/.aws
-    spark.kubernetes.executor.secrets.user1-spark-secret=/etc/secret
+    spark.kubernetes.executor.secrets.minio-secret-user1=/root/.aws
+    spark.kubernetes.executor.secrets.spark-secret-user1=/etc/secret
+    spark.kubernetes.executor.annotation.vault.hashicorp.com/role=internal-app-ns-user1
