@@ -8,12 +8,14 @@ metadata:
 data:
   spark-defaults.conf: |
     spark.master=k8s://https://kubernetes.default.svc.cluster.local
-    spark.submit.deployMode =client
+    spark.submit.deployMode=client
     spark.kubernetes.container.image=ferlabcrsj/spark:3.3.1
     spark.kubernetes.executor.annotation.vault.hashicorp.com/agent-inject=true
-    spark.kubernetes.executor.annotation.vault.hashicorp.com/agent-inject-secret-database-config.txt=internal/data/database/config
+    spark.kubernetes.executor.annotation.vault.hashicorp.com/agent-run-as-user=0
+    spark.kubernetes.executor.annotation.vault.hashicorp.com/agent-run-as-group=0
     spark.kubernetes.executor.annotation.vault.hashicorp.com/agent-inject-status=update
-    spark.kubernetes.executor.annotation.vault.hashicorp.com/agent-inject-template-database-config.txt={{- with secret "internal/data/database/config" -}}[toto]\npostgresql://{{ .Data.data.username }}:{{ .Data.data.password }}@postgres:5432/wizard{{- end -}}    
+    spark.kubernetes.executor.annotation.vault.hashicorp.com/secret-volume-path-minio=/root/.aws
+    spark.kubernetes.executor.annotation.vault.hashicorp.com/agent-inject-file-minio=credentials 
     spark.executor.instances=2
     spark.executor.memory=1g
     spark.executor.cores=1

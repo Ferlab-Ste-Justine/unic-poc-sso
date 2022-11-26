@@ -41,15 +41,18 @@ spec:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/role: 'internal-app'
-        vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/data/database/config'
+        vault.hashicorp.com/role: 'notebook-user1'
+        vault.hashicorp.com/agent-inject-secret-minio: 'notebook/user1/minio'
         vault.hashicorp.com/agent-inject-status: 'update'
-        vault.hashicorp.com/secret-volume-path-database-config.txt: "/etc/test"
-        vault.hashicorp.com/agent-inject-file-database-config.txt: "test.txt"
-        vault.hashicorp.com/agent-inject-template-database-config.txt: |
-          {{- with secret "internal/data/database/config" -}}
-          [toto]
-          postgresql://{{ .Data.data.username }}:{{ .Data.data.password }}@postgres:5432/wizard
+        vault.hashicorp.com/secret-volume-path-minio: "/home/jovyan/.aws"
+        vault.hashicorp.com/agent-inject-file-minio: "credentials"
+        vault.hashicorp.com/agent-inject-template-minio: |
+          {{- with secret "notebook/user1/minio" -}}
+          [default]
+          aws_access_key_id = {{ .Data.data.access_key_id }}
+          aws_secret_access_key = {{ .Data.data.secret_key }}
+          aws_session_token = {{ .Data.data.session_token }}
+          expiration = {{ .Data.data.expiration }}
           {{- end -}}
       labels:
         app: jupyter
@@ -99,9 +102,6 @@ spec:
           volumeMounts:
             - name: jupyter
               mountPath: /home/jovyan
-            - name: minio-secret
-              readOnly: true
-              mountPath: "/home/jovyan/.aws"
             - name: spark-secret
               readOnly: true
               mountPath: "/etc/secret"
@@ -109,9 +109,6 @@ spec:
               readOnly: true
               mountPath: "/usr/local/spark-3.3.1-bin-hadoop3/conf"
       volumes:
-        - name: minio-secret
-          secret:
-            secretName: minio-secret-user1
         - name: spark-secret
           secret:
             secretName: spark-secret-user1

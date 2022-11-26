@@ -8,6 +8,7 @@ metadata:
 data:
   spark-user1.conf: |
     spark.kubernetes.namespace=user1
-    spark.kubernetes.executor.secrets.minio-secret-user1=/root/.aws
     spark.kubernetes.executor.secrets.spark-secret-user1=/etc/secret
-    spark.kubernetes.executor.annotation.vault.hashicorp.com/role=internal-app-ns-user1
+    spark.kubernetes.executor.annotation.vault.hashicorp.com/role=notebook-ns-user1
+    spark.kubernetes.executor.annotation.vault.hashicorp.com/agent-inject-secret-minio=notebook/user1/minio
+    spark.kubernetes.executor.annotation.vault.hashicorp.com/agent-inject-template-minio={{- with secret "notebook/user1/minio" -}}[default]\naws_access_key_id = {{ .Data.data.access_key_id }}\naws_secret_access_key = {{ .Data.data.secret_key }}\naws_session_token = {{ .Data.data.session_token }}\nexpiration = {{ .Data.data.expiration }}{{- end -}}

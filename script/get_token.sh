@@ -25,16 +25,17 @@ echo -n "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\n" >> credentials
 echo -n "aws_session_token = ${AWS_SESSION_TOKEN}\n" >> credentials
 echo -n "expiration = ${EXPIRATION}\n" >> credentials
 
-kubectl create secret generic minio-secret-user1 \
-  --save-config \
-  --dry-run=client \
-  --from-file=./credentials \
-  -o yaml | \
-  kubectl apply -f -
-
-kubectl create secret -n user1 generic minio-secret-user1 \
-  --save-config \
-  --dry-run=client \
-  --from-file=./credentials \
-  -o yaml | \
-  kubectl apply -f -
+kubectl exec -it vault-0 -- sh -c "vault kv put notebook/user1/minio access_key_id='${AWS_ACCESS_KEY_ID}' secret_key='${AWS_SECRET_ACCESS_KEY}' session_token='${AWS_SESSION_TOKEN}' expiration='${EXPIRATION}'"
+#kubectl create secret generic minio-secret-user1 \
+#  --save-config \
+#  --dry-run=client \
+#  --from-file=./credentials \
+#  -o yaml | \
+#  kubectl apply -f -
+#
+#kubectl create secret -n user1 generic minio-secret-user1 \
+#  --save-config \
+#  --dry-run=client \
+#  --from-file=./credentials \
+#  -o yaml | \
+#  kubectl apply -f -
