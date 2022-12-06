@@ -95,6 +95,7 @@ spec:
 
       containers:
         - name: jupyter
+          imagePullPolicy: Never
           image: jupyter/all-spark-notebook
           ports:
             - name: jupyter
